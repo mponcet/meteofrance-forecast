@@ -1,8 +1,20 @@
+use chrono::{DateTime, Utc, serde::ts_seconds};
 use restson::{Error, RestPath};
+use serde_repr::{Serialize_repr, Deserialize_repr};
+
 #[cfg(test)]
 use restson::RestClient;
 #[cfg(test)]
 use crate::config;
+
+#[derive(Serialize_repr, Deserialize_repr, Debug)]
+#[repr(u8)]
+pub enum RainIntensity {
+    NoRain = 1,
+    Light = 2,
+    Moderate = 3,
+    Heavy = 4,
+}
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Position {
@@ -17,10 +29,12 @@ struct Position {
 
 #[derive(Serialize, Deserialize, Debug)]
 struct Forecast {
-    dt: u32,
-    rain: i32,
+    #[serde(with = "ts_seconds")]
+    dt: DateTime<Utc>,
+    rain: RainIntensity,
     desc: String,
 }
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RainForecast {
     position: Position,
