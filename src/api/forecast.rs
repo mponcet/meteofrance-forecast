@@ -1,4 +1,4 @@
-use chrono::{DateTime, Utc, serde::ts_milliseconds};
+use chrono::{serde::ts_milliseconds, DateTime, Utc};
 use restson::{Error, RestPath};
 use serde::{Deserialize, Deserializer};
 use std::collections::HashMap;
@@ -74,7 +74,8 @@ struct ForecastDeserialize {
 // Get rid of top level field 'result'
 impl<'de> Deserialize<'de> for Forecast {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-        where D: Deserializer<'de>
+    where
+        D: Deserializer<'de>,
     {
         #[derive(Deserialize, Debug)]
         struct Outer {

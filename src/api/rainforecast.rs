@@ -1,11 +1,11 @@
-use chrono::{DateTime, Utc, serde::ts_seconds};
+use chrono::{serde::ts_seconds, DateTime, Utc};
 use restson::{Error, RestPath};
-use serde_repr::{Serialize_repr, Deserialize_repr};
+use serde_repr::{Deserialize_repr, Serialize_repr};
 
 #[cfg(test)]
-use restson::RestClient;
-#[cfg(test)]
 use crate::config;
+#[cfg(test)]
+use restson::RestClient;
 
 #[derive(Serialize_repr, Deserialize_repr, Debug)]
 #[repr(u8)]
@@ -53,9 +53,11 @@ impl RestPath<()> for RainForecast {
 fn test_get_rainforecast() {
     let mut client = RestClient::new("http://webservice.meteofrance.com").unwrap();
 
-    let query = vec![("token", config::METEOFRANCE_WS_TOKEN),
-                     ("lat", "47.115537"),
-                     ("lon", "-2.104171")];
+    let query = vec![
+        ("token", config::METEOFRANCE_WS_TOKEN),
+        ("lat", "47.115537"),
+        ("lon", "-2.104171"),
+    ];
 
     let result: RainForecast = client.get_with((), &query).unwrap();
     assert_eq!(result.position.lat, 47.115537);
