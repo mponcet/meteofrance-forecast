@@ -3,7 +3,6 @@ use restson::{Error, RestPath};
 use serde::{Deserialize, Deserializer};
 use std::collections::HashMap;
 
-
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Ville {
     pub nom: String,
