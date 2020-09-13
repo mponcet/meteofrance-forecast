@@ -3,64 +3,62 @@ use restson::{Error, RestPath};
 use serde::{Deserialize, Deserializer};
 use std::collections::HashMap;
 
-#[cfg(test)]
-use restson::RestClient;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Ville {
-    nom: String,
-    latitude: String,
-    longitude: String,
+    pub nom: String,
+    pub latitude: String,
+    pub longitude: String,
     #[serde(rename = "couvertPluie")]
-    couvert_pluie: bool,
+    pub couvert_pluie: bool,
     #[serde(rename = "bulletinMontagne")]
-    bulletin_montagne: bool,
+    pub bulletin_montagne: bool,
     #[serde(rename = "bulletinCote")]
-    bulletin_cote: bool,
-    plage: bool,
-    montagne: bool,
-    vigilance: bool,
+    pub bulletin_cote: bool,
+    pub plage: bool,
+    pub montagne: bool,
+    pub vigilance: bool,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Resume {
     #[serde(with = "ts_milliseconds")]
-    date: DateTime<Utc>,
-    jour: u8,
-    description: Option<String>,
+    pub date: DateTime<Utc>,
+    pub jour: u8,
+    pub description: Option<String>,
     #[serde(rename = "directionVent")]
-    direction_vent: Option<String>,
+    pub direction_vent: Option<String>,
     #[serde(rename = "forceRafales")]
-    force_rafales: Option<String>,
+    pub force_rafales: Option<String>,
     #[serde(rename = "temperatureMin")]
-    temperature_min: Option<String>,
+    pub temperature_min: Option<String>,
     #[serde(rename = "temperatureMax")]
-    temperature_max: Option<String>,
+    pub temperature_max: Option<String>,
     #[serde(rename = "indiceUV")]
-    indice_uv: Option<String>,
+    pub indice_uv: Option<String>,
     #[serde(rename = "probaPluie")]
-    proba_pluie: Option<String>,
+    pub proba_pluie: Option<String>,
     #[serde(rename = "probaNeige")]
-    proba_neige: Option<String>,
+    pub proba_neige: Option<String>,
     #[serde(rename = "probaGel")]
-    proba_gel: Option<String>,
+    pub proba_gel: Option<String>,
     #[serde(rename = "indiceConfiance")]
-    indice_confiance: Option<String>,
+    pub indice_confiance: Option<String>,
     #[serde(rename = "temperatureMer")]
-    temperature_mer: Option<String>,
+    pub temperature_mer: Option<String>,
     #[serde(rename = "etatMer")]
-    etat_mer: Option<String>,
-    iso0: Option<String>,
+    pub etat_mer: Option<String>,
+    pub iso0: Option<String>,
     #[serde(rename = "limitePluieNeige")]
-    limite_pluie_neige: Option<String>,
+    pub limite_pluie_neige: Option<String>,
 }
 
 #[derive(Debug)]
 pub struct Forecast {
-    ville: Ville,
-    resumes: HashMap<String, Resume>,
-    previsions: HashMap<String, Resume>,
-    previsions48h: HashMap<String, Resume>,
+    pub ville: Ville,
+    pub resumes: HashMap<String, Resume>,
+    pub previsions: HashMap<String, Resume>,
+    pub previsions48h: HashMap<String, Resume>,
 }
 
 #[derive(Deserialize, Debug)]
@@ -96,12 +94,4 @@ impl RestPath<u32> for Forecast {
     fn get_path(insee_code: u32) -> Result<String, Error> {
         Ok(format!("ws/getDetail/france/{}0.json", insee_code))
     }
-}
-
-#[test]
-fn test_get_forecast() {
-    let mut client = RestClient::new("http://ws.meteofrance.com").unwrap();
-
-    let _result: Forecast = client.get(75056).unwrap();
-    println!("{:#?}", _result);
 }
